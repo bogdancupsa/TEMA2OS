@@ -18,7 +18,66 @@
 #include <sys/prctl.h>
 #include <signal.h>
 
+pthread_t t51, t52, t53, t54, t55;
 
+void* thread_function2(void *arg)
+{
+    pthread_detach(pthread_self());
+    
+    info(BEGIN, 5, 3);
+
+    info(END, 5, 3);
+
+    pthread_exit(NULL);
+}
+
+void* thread_function1(void *arg)
+{
+    //pthread_detach(pthread_self());
+    
+    if(pthread_self() == t51)
+    {
+        info(BEGIN, 5, 1);
+
+        info(END, 5, 1);
+    }
+
+    if(pthread_self() == t52)
+    {
+        info(BEGIN, 5, 2);
+
+        pthread_create(&t53, NULL, thread_function2, NULL);
+
+        pthread_join(t53, NULL);
+
+        info(END, 5, 2);
+    }
+
+    // if(pthread_self() == t53)
+    // {
+    //     info(BEGIN, 5, 3);
+
+    //     info(END, 5, 3);
+
+    //     pthread_exit(NULL);
+    // }
+
+    if(pthread_self() == t54)
+    {
+        info(BEGIN, 5, 4);
+
+        info(END, 5, 4);
+    }
+
+    if(pthread_self() == t55)
+    {
+        info(BEGIN, 5, 5);
+
+        info(END, 5, 5);
+    }
+
+    pthread_exit(NULL);
+}
 
 int main()
 {
@@ -61,6 +120,11 @@ int main()
         {
             info(BEGIN, 5, 0);
 
+            pthread_create(&t52, NULL, thread_function1, NULL);
+            pthread_create(&t51, NULL, thread_function1, NULL);
+            pthread_create(&t54, NULL, thread_function1, NULL);
+            pthread_create(&t55, NULL, thread_function1, NULL);
+            
             p6 = fork();
             if(p6 == 0)
             {
