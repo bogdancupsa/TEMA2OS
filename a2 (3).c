@@ -85,13 +85,15 @@ void* thread_function3(void *arg)
 
 void* thread_function2(void *arg)
 {
-    pthread_detach(pthread_self());
+    //pthread_detach(pthread_self());
     
     info(BEGIN, 5, 3);
 
     info(END, 5, 3);
 
+    //return NULL;
     pthread_exit(NULL);
+    //exit(5);
 }
 
 void* thread_function1(void *arg)
@@ -184,7 +186,7 @@ int main()
     info(BEGIN, 1, 0);
 
     int returnStatus;
-    sem_55_91= sem_open("sem_55_91", O_CREAT, 0644, 0);
+    sem_55_91 = sem_open("sem_55_91", O_CREAT, 0644, 0);
     sem_93_55 = sem_open("sem_93_55", O_CREAT, 0644, 0);
 
     pid_t p2, p3, p4, p5, p6, p7, p8, p9;
@@ -236,8 +238,7 @@ int main()
             {
                 exit(5);
             }
-            
-            
+              
             p6 = fork();
             if(p6 == 0)
             {
@@ -292,6 +293,7 @@ int main()
         }
 
         waitpid(p5, &returnStatus, 0);
+        waitpid(p3, &returnStatus, 0);
         info(END, 2, 0);
         
         exit(2);
@@ -333,6 +335,7 @@ int main()
     }
 
     waitpid(p2, &returnStatus, 0);
+    waitpid(p8, &returnStatus, 0);
     
     sem_close(sem_55_91);
     sem_close(sem_93_55);
@@ -341,7 +344,7 @@ int main()
     
     sem_close(sem_55_91);
     sem_close(sem_93_55);
-    pthread_barrier_destroy(&barrier_wait_for_all);
+    //pthread_barrier_destroy(&barrier_wait_for_all);
     return 0;
 
 }
